@@ -1,10 +1,11 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Upload, Users, Settings } from 'lucide-react';
+import { LayoutDashboard, Upload, FileSearch, Users, Settings } from 'lucide-react';
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/upload', label: 'Upload', icon: Upload },
+  { to: '/analysis/1', label: 'Analysis', icon: FileSearch },
   { to: '/team', label: 'Team', icon: Users },
   { to: '/settings', label: 'Settings', icon: Settings },
 ];
