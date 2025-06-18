@@ -3,11 +3,11 @@ import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, Upload, FileSearch, Users, Settings } from 'lucide-react';
 
 const navItems = [
-  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/upload', label: 'Upload', icon: Upload },
-  { to: '/analysis/1', label: 'Analysis', icon: FileSearch },
-  { to: '/team', label: 'Team', icon: Users },
-  { to: '/settings', label: 'Settings', icon: Settings },
+  { to: '/app/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/app/upload', label: 'Upload', icon: Upload },
+  { to: '/app/analysis/1', label: 'Analysis', icon: FileSearch },
+  { to: '/app/team', label: 'Team', icon: Users },
+  { to: '/app/settings', label: 'Settings', icon: Settings },
 ];
 
 export default function Navigation() {
