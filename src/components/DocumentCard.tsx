@@ -86,7 +86,7 @@ export default function DocumentCard({ document }: DocumentCardProps) {
 
         {document.status === 'completed' && (
           <Link
-            to={`/analysis/${document.id}`}
+            to={`/app/analysis/${document.id}`}
             className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium"
           >
             <Eye className="h-4 w-4" />

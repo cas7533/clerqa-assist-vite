@@ -19,8 +19,8 @@ function App() {
   return (
     <ClerkProvider 
       publishableKey={CLERK_PUBLISHABLE_KEY || 'pk_test_placeholder'}
-      afterSignInUrl="/dashboard"
-      afterSignUpUrl="/dashboard"
+      afterSignInUrl="/app/dashboard"
+      afterSignUpUrl="/app/dashboard"
     >
       <Router>
         <div className="min-h-screen bg-gray-50">
