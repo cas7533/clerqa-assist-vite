@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clerqa - AI-Powered Legal Contract Analysis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.5;
+            color: #374151;
+            background-color: #f9fafb;
+            overflow-x: hidden;
+        }
+
+        /* Animation Keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Scroll-triggered animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+
+        .animate-on-scroll.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+        .stagger-5 { transition-delay: 0.5s; }
+        .stagger-6 { transition-delay: 0.6s; }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e5e7eb;
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2563eb;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-item {
+            color: #6b7280;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #2563eb;
+            transition: width 0.3s ease;
+        }
+
+        .nav-item:hover {
+            color: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .nav-item:hover::after {
+            width: 100%;
+        }
+
+        .header-cta {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #2563eb;
+            border: 1px solid #2563eb;
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: #eff6ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            color: white;
+            padding: 80px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.1) 1px, transparent 0);
+            background-size: 20px 20px;
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            line-height: 1.1;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            opacity: 0;
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1s ease-out 0.3s forwards;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.6s forwards;
+        }
+
+        .hero .btn-primary {
+            background: white;
+            color: #2563eb;
+            padding: 12px 24px;
+            font-size: 16px;
+            animation: pulse 2s infinite 2s;
+        }
+
+        .hero .btn-primary:hover {
+            animation: none;
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        .hero .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 1px solid white;
+            padding: 12px 24px;
+            font-size: 16px;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 24px;
+            background: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 16px;
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+        }
+
+        .feature-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.1);
+            border-color: #2563eb;
+            transform: translateY(-8px);
+            background: white;
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: #eff6ff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .feature-card:hover .feature-icon {
+            background: #2563eb;
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .feature-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 12px;
+            transition: color 0.3s ease;
+        }
+
+        .feature-card:hover .feature-title {
+            color: #2563eb;
+        }
+
+        .feature-description {
+            color: #6b7280;
+            line-height: 1.6;
+            transition: color 0.3s ease;
+        }
+
+        .feature-card:hover .feature-description {
+            color: #374151;
+        }
+
+        /* Security Section */
+        .security {
+            padding: 80px 24px;
+            background: #f9fafb;
+        }
+
+        .security-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        .security-text h2 {
+            font-size: 36px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 20px;
+        }
+
+        .security-text p {
+            font-size: 18px;
+            color: #6b7280;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .security-features {
+            list-style: none;
+            margin-bottom: 32px;
+        }
+
+        .security-features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            color: #374151;
+            opacity: 0;
+            animation: fadeInLeft 0.6s ease-out forwards;
+        }
+
+        .security-features li:nth-child(1) { animation-delay: 0.1s; }
+        .security-features li:nth-child(2) { animation-delay: 0.2s; }
+        .security-features li:nth-child(3) { animation-delay: 0.3s; }
+        .security-features li:nth-child(4) { animation-delay: 0.4s; }
+        .security-features li:nth-child(5) { animation-delay: 0.5s; }
+        .security-features li:nth-child(6) { animation-delay: 0.6s; }
+        .security-features li:nth-child(7) { animation-delay: 0.7s; }
+
+        .security-features li::before {
+            content: '✓';
+            background: #10b981;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .security-diagram {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .diagram-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 24px;
+        }
+
+        .privacy-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .flow-step {
+            background: #eff6ff;
+            border: 1px solid #2563eb;
+            border-radius: 8px;
+            padding: 16px;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .flow-step:hover {
+            background: #dbeafe;
+            transform: translateX(8px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .flow-step::after {
+            content: '↓';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #2563eb;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .flow-step:last-child::after {
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: #2563eb;
+            margin-bottom: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .flow-step:hover .step-title {
+            transform: translateX(4px);
+        }
+
+        .step-description {
+            font-size: 14px;
+            color: #6b7280;
+            transition: color 0.3s ease;
+        }
+
+        .flow-step:hover .step-description {
+            color: #374151;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 80px 24px;
+            background: white;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            margin-top: 48px;
+        }
+
+        .pricing-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 32px;
+            text-align: center;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .pricing-card:hover {
+            border-color: #2563eb;
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
+            transform: translateY(-12px) scale(1.02);
+        }
+
+        .pricing-card.featured {
+            border-color: #2563eb;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured:hover {
+            transform: translateY(-12px) scale(1.07);
+        }
+
+        .plan-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2563eb;
+            color: white;
+            padding: 4px 16px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        .plan-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card:hover .plan-name {
+            color: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .plan-description {
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        .plan-price {
+            font-size: 48px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card:hover .plan-price {
+            color: #2563eb;
+            transform: scale(1.1);
+        }
+
+        .plan-price-period {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 32px;
+            text-align: left;
+        }
+
+        .plan-features li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            color: #374151;
+            font-size: 14px;
+            transition: transform 0.3s ease;
+        }
+
+        .pricing-card:hover .plan-features li {
+            transform: translateX(4px);
+        }
+
+        .plan-features li::before {
+            content: '✓';
+            color: #10b981;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card:hover .plan-features li::before {
+            color: #2563eb;
+            transform: scale(1.2);
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 80px 24px;
+            background: #f9fafb;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            margin-top: 48px;
+        }
+
+        .testimonial-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial-card:hover {
+            box-shadow: 0 12px 28px rgba(37, 99, 235, 0.12);
+            transform: translateY(-6px);
+            border-color: #2563eb;
+        }
+
+        .testimonial-text {
+            color: #374151;
+            margin-bottom: 16px;
+            font-style: italic;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .testimonial-text::before {
+            content: '"';
+            font-size: 48px;
+            color: #e5e7eb;
+            position: absolute;
+            top: -20px;
+            left: -10px;
+            transition: color 0.3s ease;
+        }
+
+        .testimonial-card:hover .testimonial-text::before {
+            color: #2563eb;
+        }
+
+        .testimonial-card:hover .testimonial-text {
+            color: #111827;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #6b7280;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover .author-avatar {
+            background: #2563eb;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .author-info {
+            flex: 1;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 2px;
+        }
+
+        .author-title {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        /* FAQ Section */
+        .faq {
+            padding: 80px 24px;
+            background: white;
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin: 48px auto 0;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #e5e7eb;
+            padding: 24px 0;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            background: rgba(37, 99, 235, 0.02);
+            padding-left: 16px;
+            padding-right: 16px;
+            border-radius: 8px;
+            margin: 0 -16px;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            color: #2563eb;
+            transform: translateX(4px);
+        }
+
+        .faq-question span {
+            transition: transform 0.3s ease;
+            color: #2563eb;
+            font-size: 20px;
+            font-weight: 300;
+        }
+
+        .faq-item:hover .faq-question span {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            color: #6b7280;
+            line-height: 1.6;
+            transition: color 0.3s ease;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            padding-top: 0;
+        }
+
+        .faq-item:hover .faq-answer {
+            color: #374151;
+        }
+
+        /* Footer */
+        .footer {
+            background: #111827;
+            color: white;
+            padding: 48px 24px 24px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+        }
+
+        .footer-section h3 {
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 8px;
+        }
+
+        .footer-section a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #374151;
+            margin-top: 32px;
+            padding-top: 16px;
+            text-align: center;
+            color: #9ca3af;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-subtitle {
+                font-size: 18px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .security-content {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">Clerqa</div>
+        <nav class="nav-menu">
+            <a href="#features" class="nav-item">Features</a>
+            <a href="#security" class="nav-item">Security</a>
+            <a href="#pricing" class="nav-item">Pricing</a>
+            <a href="#testimonials" class="nav-item">Testimonials</a>
+        </nav>
+        <div class="header-cta">
+            <a href="#" class="btn btn-secondary">Sign In</a>
+            <a href="#" class="btn btn-primary">Start Free Trial</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Unlock The Power Of <br>
+                <span style="color: #60a5fa;">AI-Powered Legal</span> <br>
+                Contract Analysis
+            </h1>
+            <p class="hero-subtitle">
+                Transform hours of manual contract review into minutes with enterprise-grade AI that identifies risks, extracts clauses, and provides actionable insights for mid-size law firms.
+            </p>
+            <div class="hero-cta">
+                <a href="#" class="btn btn-primary">Start Free Analysis</a>
+                <a href="#" class="btn btn-secondary">Watch Demo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features animate-on-scroll" id="features">
+        <div class="container">
+            <div class="section-header animate-on-scroll">
+                <h2 class="section-title">Instant Contract Intelligence with AI</h2>
+                <p class="section-subtitle">
+                    Our AI analyzes contracts 80% faster than manual review, identifying critical clauses, risks, and compliance issues with 95% accuracy.
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card animate-on-scroll stagger-1">
+                    <div class="feature-icon">🔍</div>
+                    <h3 class="feature-title">Intelligent Clause Extraction</h3>
+                    <p class="feature-description">
+                        Automatically identify and categorize 15+ clause types including termination, indemnification, liability limitations, and IP rights with confidence scoring.
+                    </p>
+                </div>
+                <div class="feature-card animate-on-scroll stagger-2">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Lightning-Fast Analysis</h3>
+                    <p class="feature-description">
+                        Process 20-page contracts in under 30 seconds. What used to take 2-4 hours of associate time now takes minutes with our AI engine.
+                    </p>
+                </div>
+                <div class="feature-card animate-on-scroll stagger-3">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title">Risk Assessment & Scoring</h3>
+                    <p class="feature-description">
+                        Get comprehensive risk analysis with detailed explanations, recommendations, and industry benchmarking to make informed decisions.
+                    </p>
+                </div>
+                <div class="feature-card animate-on-scroll stagger-4">
+                    <div class="feature-icon">👥</div>
+                    <h3 class="feature-title">Team Collaboration</h3>
+                    <p class="feature-description">
+                        Share analyses, add comments, and collaborate with team members through role-based access control and real-time updates.
+                    </p>
+                </div>
+                <div class="feature-card animate-on-scroll stagger-5">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Analytics & Insights</h3>
+                    <p class="feature-description">
+                        Track time saved, cost reduction, and processing volume with detailed analytics and ROI reporting for your firm.
+                    </p>
+                </div>
+                <div class="feature-card animate-on-scroll stagger-6">
+                    <div class="feature-icon">🔗</div>
+                    <h3 class="feature-title">Seamless Integration</h3>
+                    <p class="feature-description">
+                        Export results to CSV, JSON, or PDF. Integrate with popular practice management systems through our comprehensive API.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Section -->
+    <section class="security animate-on-scroll" id="security">
+        <div class="container">
+            <div class="security-content">
+                <div class="security-text animate-on-scroll">
+                    <h2>Enterprise-Grade Security & Privacy</h2>
+                    <p>
+                        Clerqa implements a privacy-first architecture that minimizes data exposure while maximizing AI accuracy. Your sensitive legal documents are protected through multiple layers of security.
+                    </p>
+                    <ul class="security-features">
+                        <li>Contract ID system replaces raw document storage</li>
+                        <li>PII redaction before AI processing</li>
+                        <li>Enterprise OpenAI with no model training</li>
+                        <li>Row-level security with Clerk authentication</li>
+                        <li>Encrypted storage with signed URLs</li>
+                        <li>Full audit trails and right-to-erasure</li>
+                        <li>SOC 2 and GDPR compliance ready</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary">Learn About Our Security</a>
+                </div>
+                <div class="security-diagram animate-on-scroll stagger-2">
+                    <h3 class="diagram-title">Privacy-First AI Processing</h3>
+                    <div class="privacy-flow">
+                        <div class="flow-step">
+                            <div class="step-title">1. Document Upload</div>
+                            <div class="step-description">Secure upload with virus scanning</div>
+                        </div>
+                        <div class="flow-step">
+                            <div class="step-title">2. PII Redaction</div>
+                            <div class="step-description">Strip sensitive data before AI</div>
+                        </div>
+                        <div class="flow-step">
+                            <div class="step-title">3. AI Analysis</div>
+                            <div class="step-description">Process with enterprise OpenAI</div>
+                        </div>
+                        <div class="flow-step">
+                            <div class="step-title">4. Store Results</div>
+                            <div class="step-description">Save only extracted insights</div>
+                        </div>
+                        <div class="flow-step">
+                            <div class="step-title">5. User Access</div>
+                            <div class="step-description">Role-based secure access</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing animate-on-scroll" id="pricing">
+        <div class="container">
+            <div class="section-header animate-on-scroll">
+                <h2 class="section-title">Predictable Pricing. No Surprises.</h2>
+                <p class="section-subtitle">
+                    Choose the plan that fits your firm's size and needs. All plans include enterprise-grade security and our core AI features.
+                </p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card animate-on-scroll stagger-1">
+                    <div class="plan-name">Starter</div>
+                    <div class="plan-description">Perfect for small firms getting started with AI</div>
+                    <div class="plan-price">$99</div>
+                    <div class="plan-price-period">per month</div>
+                    <ul class="plan-features">
+                        <li>50 documents per month</li>
+                        <li>10 clause types extraction</li>
+                        <li>Basic risk assessment</li>
+                        <li>Email support</li>
+                        <li>1 primary user + 2 read-only</li>
+                        <li>Export to CSV/PDF</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary" style="width: 100%;">Get Started</a>
+                </div>
+                <div class="pricing-card featured animate-on-scroll stagger-2">
+                    <div class="plan-badge">Most Popular</div>
+                    <div class="plan-name">Professional</div>
+                    <div class="plan-description">Ideal for growing mid-size firms</div>
+                    <div class="plan-price">$299</div>
+                    <div class="plan-price-period">per month</div>
+                    <ul class="plan-features">
+                        <li>200 documents per month</li>
+                        <li>15+ clause types extraction</li>
+                        <li>Advanced risk assessment</li>
+                        <li>Priority email + phone support</li>
+                        <li>Up to 5 active users</li>
+                        <li>Team collaboration features</li>
+                        <li>API access</li>
+                        <li>Usage analytics</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary" style="width: 100%;">Start Free Trial</a>
+                </div>
+                <div class="pricing-card animate-on-scroll stagger-3">
+                    <div class="plan-name">Enterprise</div>
+                    <div class="plan-description">For large firms with advanced needs</div>
+                    <div class="plan-price">$599</div>
+                    <div class="plan-price-period">per month</div>
+                    <ul class="plan-features">
+                        <li>500 documents per month</li>
+                        <li>Custom clause training</li>
+                        <li>Advanced analytics & reporting</li>
+                        <li>Dedicated customer success</li>
+                        <li>Unlimited users</li>
+                        <li>SSO integration</li>
+                        <li>Custom integrations</li>
+                        <li>SLA guarantees</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary" style="width: 100%;">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials animate-on-scroll" id="testimonials">
+        <div class="container">
+            <div class="section-header animate-on-scroll">
+                <h2 class="section-title">Trusted by Leading Law Firms</h2>
+                <p class="section-subtitle">
+                    See how legal professionals are transforming their contract review process with Clerqa
+                </p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card animate-on-scroll stagger-1">
+                    <p class="testimonial-text">
+                        Clerqa has revolutionized our contract review process. What used to take our associates 3-4 hours now takes 30 minutes. The AI accuracy is impressive and the risk assessments are spot-on.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SC</div>
+                        <div class="author-info">
+                            <div class="author-name">Sarah Chen</div>
+                            <div class="author-title">Legal Operations Manager, Morrison & Associates</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card animate-on-scroll stagger-2">
+                    <p class="testimonial-text">
+                        The team collaboration features are fantastic. Our entire legal team can now review and comment on contracts in real-time. It has improved our efficiency and reduced errors significantly.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MR</div>
+                        <div class="author-info">
+                            <div class="author-name">Michael Rodriguez</div>
+                            <div class="author-title">Senior Associate, Hamilton Legal Group</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card animate-on-scroll stagger-3">
+                    <p class="testimonial-text">
+                        As a managing partner, I love the ROI dashboard. We have saved over $50K in the first quarter alone. The pricing is transparent and the value is undeniable.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JW</div>
+                        <div class="author-info">
+                            <div class="author-name">Jennifer Williams</div>
+                            <div class="author-title">Managing Partner, Williams & Partners</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq animate-on-scroll">
+        <div class="container">
+            <div class="section-header animate-on-scroll">
+                <h2 class="section-title">Frequently Asked Questions</h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item animate-on-scroll stagger-1">
+                    <div class="faq-question">
+                        How accurate is the AI contract analysis?
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Our AI achieves 95%+ accuracy in clause extraction and risk assessment. Each analysis includes confidence scores, and we continuously improve our models based on feedback from legal professionals.
+                    </div>
+                </div>
+                <div class="faq-item animate-on-scroll stagger-2">
+                    <div class="faq-question">
+                        What types of contracts does Clerqa support?
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Clerqa supports a wide range of commercial contracts including service agreements, NDAs, employment contracts, licensing agreements, and more. We handle both PDF and DOCX formats up to 50MB.
+                    </div>
+                </div>
+                <div class="faq-item animate-on-scroll stagger-3">
+                    <div class="faq-question">
+                        How secure is my data with Clerqa?
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Security is our top priority. We use enterprise-grade encryption, PII redaction, and store only analysis results - not your raw documents. Our platform is SOC 2 and GDPR compliant.
+                    </div>
+                </div>
+                <div class="faq-item animate-on-scroll stagger-4">
+                    <div class="faq-question">
+                        Can I integrate Clerqa with my existing practice management system?
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes! Clerqa offers comprehensive APIs and pre-built integrations with popular practice management systems like Clio, MyCase, and PracticePanther. We also support custom integrations.
+                    </div>
+                </div>
+                <div class="faq-item animate-on-scroll stagger-5">
+                    <div class="faq-question">
+                        Do you offer a free trial?
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, we offer a 14-day free trial with full access to our Professional plan features. No credit card required to start your trial.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Product</h3>
+                <ul>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">Security</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">API Documentation</a></li>
+                    <li><a href="#">Integrations</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Company</h3>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Partners</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">System Status</a></li>
+                    <li><a href="#">Community</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Security</a></li>
+                    <li><a href="#">Compliance</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Clerqa by Techvaultlabs. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simplified JavaScript for compatibility
+        document.addEventListener('DOMContentLoaded', function() {
+            // Scroll-triggered animations
+            function initScrollAnimations() {
+                var observerOptions = {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -100px 0px'
+                };
+
+                var observer = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('animate');
+                        }
+                    });
+                }, observerOptions);
+
+                var elements = document.querySelectorAll('.animate-on-scroll');
+                for (var i = 0; i < elements.length; i++) {
+                    observer.observe(elements[i]);
+                }
+            }
+
+            // FAQ functionality
+            function initFAQ() {
+                var questions = document.querySelectorAll('.faq-question');
+                
+                for (var i = 0; i < questions.length; i++) {
+                    questions[i].addEventListener('click', function() {
+                        var answer = this.nextElementSibling;
+                        var icon = this.querySelector('span');
+                        
+                        if (answer.style.maxHeight) {
+                            answer.style.maxHeight = null;
+                            answer.style.opacity = '0';
+                            answer.style.paddingTop = '0';
+                            icon.style.transform = 'rotate(0deg)';
+                        } else {
+                            answer.style.maxHeight = answer.scrollHeight + 'px';
+                            answer.style.opacity = '1';
+                            answer.style.paddingTop = '12px';
+                            icon.style.transform = 'rotate(45deg)';
+                        }
+                    });
+                }
+            }
+
+            // Smooth scrolling
+            function initSmoothScroll() {
+                var links = document.querySelectorAll('a[href^="#"]');
+                
+                for (var i = 0; i < links.length; i++) {
+                    links[i].addEventListener('click', function(e) {
+                        e.preventDefault();
+                        var target = document.querySelector(this.getAttribute('href'));
+                        if (target) {
+                            target.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    });
+                }
+            }
+
+            // Initialize all functionality
+            initScrollAnimations();
+            initFAQ();
+            initSmoothScroll();
+        });
+    </script>
+</body>
+</html>
