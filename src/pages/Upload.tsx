@@ -296,16 +296,6 @@ export default function Upload() {
               </div>
             ))}
           </div>
-
-          <div className="mt-6 pt-4 border-t border-gray-200">
-            <button 
-              onClick={() => fileInputRef.current?.click()}
-              className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
-            >
-              <UploadIcon className="h-4 w-4" />
-              Upload More Documents
-            </button>
-          </div>
         </div>
       )}
 
