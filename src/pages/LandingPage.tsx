@@ -15,12 +15,15 @@ import {
   Award,
   Search,
   BarChart3,
-  Link2
+  Link2,
+  Menu,
+  X
 } from 'lucide-react';
 
 export default function LandingPage() {
   const { isSignedIn } = useUser();
   const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
   React.useEffect(() => {
     if (isSignedIn) {
@@ -77,6 +80,12 @@ export default function LandingPage() {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+    // Close mobile menu after navigation
+    setIsMobileMenuOpen(false);
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   return (
@@ -112,6 +121,24 @@ export default function LandingPage() {
           to {
             opacity: 1;
             transform: translateY(0);
+          }
+        }
+
+        @keyframes slideInRight {
+          from {
+            transform: translateX(100%);
+          }
+          to {
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes slideOutRight {
+          from {
+            transform: translateX(0);
+          }
+          to {
+            transform: translateX(100%);
           }
         }
 
@@ -260,6 +287,34 @@ export default function LandingPage() {
         .flow-step:last-child::after {
           display: none;
         }
+
+        .mobile-menu-enter {
+          animation: slideInRight 0.3s ease-out forwards;
+        }
+
+        .mobile-menu-exit {
+          animation: slideOutRight 0.3s ease-out forwards;
+        }
+
+        .mobile-menu-backdrop {
+          backdrop-filter: blur(4px);
+          background: rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 767px) {
+          .mobile-menu-item {
+            transform: translateX(20px);
+            opacity: 0;
+            animation: fadeInLeft 0.3s ease-out forwards;
+          }
+
+          .mobile-menu-item:nth-child(1) { animation-delay: 0.1s; }
+          .mobile-menu-item:nth-child(2) { animation-delay: 0.2s; }
+          .mobile-menu-item:nth-child(3) { animation-delay: 0.3s; }
+          .mobile-menu-item:nth-child(4) { animation-delay: 0.4s; }
+          .mobile-menu-item:nth-child(5) { animation-delay: 0.5s; }
+          .mobile-menu-item:nth-child(6) { animation-delay: 0.6s; }
+        }
       `}</style>
 
       {/* Navigation */}
@@ -272,7 +327,7 @@ export default function LandingPage() {
               <span className="text-2xl font-bold text-blue-600">Clerqa</span>
             </div>
             
-            {/* Centered Navigation Links */}
+            {/* Desktop Navigation Links */}
             <div className="hidden md:flex items-center justify-center flex-1">
               <div className="flex items-center gap-8">
                 <button 
@@ -302,8 +357,8 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Right Side Buttons */}
-            <div className="flex items-center gap-4 flex-shrink-0">
+            {/* Desktop Right Side Buttons */}
+            <div className="hidden md:flex items-center gap-4 flex-shrink-0">
               <SignInButton mode="modal">
                 <button className="text-blue-600 border border-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:-translate-y-0.5">
                   Sign In
@@ -311,6 +366,84 @@ export default function LandingPage() {
               </SignInButton>
               <SignInButton mode="modal">
                 <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-all duration-300 hover:-translate-y-0.5 shadow-lg hover:shadow-xl">
+                  Start Free Trial
+                </button>
+              </SignInButton>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden flex items-center">
+              <button
+                onClick={toggleMobileMenu}
+                className="text-gray-600 hover:text-blue-600 p-2 rounded-lg transition-colors duration-300"
+                aria-label="Toggle mobile menu"
+              >
+                {isMobileMenuOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <div 
+            className="fixed inset-0 z-40 md:hidden mobile-menu-backdrop"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+        )}
+
+        {/* Mobile Menu Panel */}
+        <div className={`fixed top-16 right-0 h-full w-80 bg-white shadow-2xl z-50 md:hidden transform transition-transform duration-300 ease-out ${
+          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}>
+          <div className="flex flex-col h-full">
+            {/* Mobile Navigation Links */}
+            <div className="flex-1 px-6 py-8 space-y-6">
+              <button 
+                onClick={() => scrollToSection('features')}
+                className="mobile-menu-item block w-full text-left text-lg font-medium text-gray-700 hover:text-blue-600 py-3 border-b border-gray-100 transition-colors duration-300"
+              >
+                Features
+              </button>
+              <button 
+                onClick={() => scrollToSection('security')}
+                className="mobile-menu-item block w-full text-left text-lg font-medium text-gray-700 hover:text-blue-600 py-3 border-b border-gray-100 transition-colors duration-300"
+              >
+                Security
+              </button>
+              <button 
+                onClick={() => scrollToSection('pricing')}
+                className="mobile-menu-item block w-full text-left text-lg font-medium text-gray-700 hover:text-blue-600 py-3 border-b border-gray-100 transition-colors duration-300"
+              >
+                Pricing
+              </button>
+              <button 
+                onClick={() => scrollToSection('testimonials')}
+                className="mobile-menu-item block w-full text-left text-lg font-medium text-gray-700 hover:text-blue-600 py-3 border-b border-gray-100 transition-colors duration-300"
+              >
+                Testimonials
+              </button>
+            </div>
+
+            {/* Mobile CTA Buttons */}
+            <div className="mobile-menu-item px-6 py-6 border-t border-gray-200 space-y-4">
+              <SignInButton mode="modal">
+                <button 
+                  className="w-full text-blue-600 border border-blue-600 hover:bg-blue-50 px-6 py-3 rounded-lg font-medium transition-all duration-300"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Sign In
+                </button>
+              </SignInButton>
+              <SignInButton mode="modal">
+                <button 
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-lg hover:shadow-xl"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
                   Start Free Trial
                 </button>
               </SignInButton>
