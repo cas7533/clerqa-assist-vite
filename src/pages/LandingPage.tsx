@@ -266,39 +266,44 @@ export default function LandingPage() {
       <nav className="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50" style={{ animation: 'slideDown 0.8s ease-out' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-2">
+            {/* Logo */}
+            <div className="flex items-center gap-2 flex-shrink-0">
               <Building2 className="h-8 w-8 text-blue-600" />
               <span className="text-2xl font-bold text-blue-600">Clerqa</span>
             </div>
             
-            <div className="hidden md:flex items-center gap-8">
-              <button 
-                onClick={() => scrollToSection('features')}
-                className="nav-item text-gray-600 hover:text-blue-600 font-medium transition-all duration-300 relative py-2"
-              >
-                Features
-              </button>
-              <button 
-                onClick={() => scrollToSection('security')}
-                className="nav-item text-gray-600 hover:text-blue-600 font-medium transition-all duration-300 relative py-2"
-              >
-                Security
-              </button>
-              <button 
-                onClick={() => scrollToSection('pricing')}
-                className="nav-item text-gray-600 hover:text-blue-600 font-medium transition-all duration-300 relative py-2"
-              >
-                Pricing
-              </button>
-              <button 
-                onClick={() => scrollToSection('testimonials')}
-                className="nav-item text-gray-600 hover:text-blue-600 font-medium transition-all duration-300 relative py-2"
-              >
-                Testimonials
-              </button>
+            {/* Centered Navigation Links */}
+            <div className="hidden md:flex items-center justify-center flex-1">
+              <div className="flex items-center gap-8">
+                <button 
+                  onClick={() => scrollToSection('features')}
+                  className="nav-item text-gray-600 hover:text-blue-600 font-medium transition-all duration-300 relative py-2"
+                >
+                  Features
+                </button>
+                <button 
+                  onClick={() => scrollToSection('security')}
+                  className="nav-item text-gray-600 hover:text-blue-600 font-medium transition-all duration-300 relative py-2"
+                >
+                  Security
+                </button>
+                <button 
+                  onClick={() => scrollToSection('pricing')}
+                  className="nav-item text-gray-600 hover:text-blue-600 font-medium transition-all duration-300 relative py-2"
+                >
+                  Pricing
+                </button>
+                <button 
+                  onClick={() => scrollToSection('testimonials')}
+                  className="nav-item text-gray-600 hover:text-blue-600 font-medium transition-all duration-300 relative py-2"
+                >
+                  Testimonials
+                </button>
+              </div>
             </div>
 
-            <div className="flex items-center gap-4">
+            {/* Right Side Buttons */}
+            <div className="flex items-center gap-4 flex-shrink-0">
               <SignInButton mode="modal">
                 <button className="text-blue-600 border border-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:-translate-y-0.5">
                   Sign In
