@@ -298,7 +298,7 @@ export default function LandingPage() {
 
         .mobile-menu-backdrop {
           backdrop-filter: blur(4px);
-          background: rgba(0, 0, 0, 0.3);
+          background: rgba(0, 0, 0, 0.4);
         }
 
         @media (max-width: 767px) {
@@ -397,33 +397,33 @@ export default function LandingPage() {
         )}
 
         {/* Mobile Menu Panel */}
-        <div className={`fixed top-16 right-0 h-full w-80 bg-white shadow-2xl z-50 md:hidden transform transition-transform duration-300 ease-out ${
+        <div className={`fixed top-16 right-0 h-full w-80 bg-white/95 backdrop-blur-md shadow-2xl z-50 md:hidden transform transition-transform duration-300 ease-out ${
           isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}>
-          <div className="flex flex-col h-full">
+          <div className="flex flex-col h-full bg-white/60 backdrop-blur-sm">
             {/* Mobile Navigation Links */}
             <div className="flex-1 px-6 py-8 space-y-6">
               <button 
                 onClick={() => scrollToSection('features')}
-                className="mobile-menu-item block w-full text-left text-lg font-medium text-gray-700 hover:text-blue-600 py-3 border-b border-gray-100 transition-colors duration-300"
+                className="mobile-menu-item block w-full text-left text-lg font-medium text-gray-800 hover:text-blue-600 py-3 border-b border-gray-200 transition-colors duration-300"
               >
                 Features
               </button>
               <button 
                 onClick={() => scrollToSection('security')}
-                className="mobile-menu-item block w-full text-left text-lg font-medium text-gray-700 hover:text-blue-600 py-3 border-b border-gray-100 transition-colors duration-300"
+                className="mobile-menu-item block w-full text-left text-lg font-medium text-gray-800 hover:text-blue-600 py-3 border-b border-gray-200 transition-colors duration-300"
               >
                 Security
               </button>
               <button 
                 onClick={() => scrollToSection('pricing')}
-                className="mobile-menu-item block w-full text-left text-lg font-medium text-gray-700 hover:text-blue-600 py-3 border-b border-gray-100 transition-colors duration-300"
+                className="mobile-menu-item block w-full text-left text-lg font-medium text-gray-800 hover:text-blue-600 py-3 border-b border-gray-200 transition-colors duration-300"
               >
                 Pricing
               </button>
               <button 
                 onClick={() => scrollToSection('testimonials')}
-                className="mobile-menu-item block w-full text-left text-lg font-medium text-gray-700 hover:text-blue-600 py-3 border-b border-gray-100 transition-colors duration-300"
+                className="mobile-menu-item block w-full text-left text-lg font-medium text-gray-800 hover:text-blue-600 py-3 border-b border-gray-200 transition-colors duration-300"
               >
                 Testimonials
               </button>

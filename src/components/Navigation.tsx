@@ -10,7 +10,36 @@ const navItems = [
   { to: '/app/settings', label: 'Settings', icon: Settings },
 ];
 
-export default function Navigation() {
+interface NavigationProps {
+  mobile?: boolean;
+  onNavigate?: () => void;
+}
+
+export default function Navigation({ mobile = false, onNavigate }: NavigationProps) {
+  if (mobile) {
+    return (
+      <>
+        {navItems.map(({ to, label, icon: Icon }) => (
+          <NavLink
+            key={to}
+            to={to}
+            onClick={onNavigate}
+            className={({ isActive }) =>
+              `flex items-center gap-3 w-full text-left text-lg font-medium py-3 px-2 rounded-lg transition-all duration-300 ${
+                isActive
+                  ? 'text-blue-600 bg-blue-50 border-l-4 border-blue-600'
+                  : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+              }`
+            }
+          >
+            <Icon className="h-5 w-5" />
+            {label}
+          </NavLink>
+        ))}
+      </>
+    );
+  }
+
   return (
     <>
       {navItems.map(({ to, label, icon: Icon }) => (
